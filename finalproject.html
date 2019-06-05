@@ -1,0 +1,252 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Processing Demo</title>
+<script type="text/javascript" src="flappy.js"></script>
+</head>
+<body>
+<script type="text/processing">
+
+
+
+//START FINAL PROJECT CODE//
+
+/**
+* @ Author: Khanh Tran 
+* @ Version: 1.0
+* @ Date: 6/6/19
+*/
+
+//0: Initial Screen
+//1: Game Screen 
+
+//GAME PLAY SETTINGS 
+float x = 270;
+float y = 270;
+float mx = -100;
+float mx2 = 1200;
+float my = -400;
+float my2 = 1500;
+float x1 = random(0, 500);
+float x2 = random(0, 500);
+float y1 = random(0, 500);
+float y2 = random(0, 500);
+float ex = random(0, 520);
+float ey = random(0, 520);
+float speed = 4;
+float mspeed = 3;
+
+//SCORING
+int point;
+int epoint = point;
+boolean life = false;
+boolean eat = false;
+boolean epixel = false;
+boolean u = false;
+boolean d = false;
+boolean r = false;
+boolean l = false;
+
+void setup() {
+  size(600, 600);
+  noStroke();
+}
+void draw() {
+  if (mousePressed && (!life)) {
+    life = true;
+    point = 0;
+    epoint = 0;
+  }
+  if (life) {
+  background(#ADADAD);
+  if (point == epoint + 6) {
+    epixel = true;
+    epoint = point;
+    ex = random(0, 520);
+    ey = random(0, 520);
+  }
+  if (eat) {
+    if (point == epoint + 5) {
+      eat = false;
+      epoint = point;
+    }
+  }
+  fill(#FF4343);
+  if (epixel) {
+    rect(ex, ey, 80, 80);
+    if (point == epoint + 6) {
+      epixel = false;
+      epoint = point;
+    }
+    if ((x+60 >= ex) && (x <= ex +80) && (y+60 >= ey) && (y <= ey+80)) {
+      epixel = false;
+      eat = true;
+      epoint = point;
+    }
+  }
+  if (eat) {
+    fill(#FF4343);
+  } else {
+    fill(random(213),random(0),random(122));
+    }
+  
+  rect(x1, my, 100, 100);
+  rect(x2, my2, 100, 100);
+  rect(mx, y1, 100, 100);
+  rect(mx2, y2, 100, 100);
+  if (mx > width) {
+    mx = -100;
+    y1 = random(0, 500);
+    point++;
+  }
+  if (mx2 < -100) {
+    mx2 = 600;
+    y2 = random(0, 500);
+    point++;
+  }
+  if (my > width) {
+    my = -100;
+    x1 = random(0, 500);
+    point++;
+  }
+  if (my2 < -100) {
+    my2 = 600;
+    x2 = random(0, 500);
+    point++;
+  }
+  if ((x+60 >= x1) && (x <= x1+100) && (y+60 >= my) && (y <= my+100)) {
+    if (eat) {
+      my = -100;
+      x1 = random(0, 500);
+      point++;
+    } else {
+      life = false;
+    }
+  }
+  if ((x+60 >= x2) && (x <= x2+100) && (y+60 >= my2) && (y <= my2+100)) {
+    if (eat) {
+      my2 = -100;
+      x2 = random(0, 500);
+      point++;
+    } else {
+      life = false;
+    }
+  }
+  if ((x+60 >= mx) && (x <= mx+100) && (y+60 >= y1) && (y <= y1+100)) {
+    if (eat) {
+      mx = -100;
+      y1 = random(0, 500);
+      point++;
+    } else {
+      life = false;
+    }
+  }
+  if ((x+60 >= mx2) && (x <= mx2+100) && (y+60 >= y2) && (y <= y2+100)) {
+    if (eat) {
+      mx2 = -100;
+      y2 = random(0, 500);
+      point++;
+    } else {
+      life = false;
+    }
+  }
+  mx += mspeed;
+  mx2 -= mspeed;
+  my += mspeed;
+  my2 -= mspeed;
+  mspeed += 0.001;
+  speed += 0.001;
+  } else {
+   
+// INITIAL SCREEN 
+ 
+    background(100);
+    stroke(255);
+    fill(255);
+    textSize(30);
+    text ("NO COP, NO STOP", 170, 210);
+    textSize (9.5);
+    text("HOW TO PLAY: Use you arrow keys to move you car. To earn points, avoid the flickering cop cars and ram into the civilian or nonflickering cars" ,0 , 400);
+    textSize (20);
+    text("(CLICK TO START)",200, 450); //BUTTON 
+    
+   
+//THE COPS  
+    mspeed = 3;
+    speed = 4;
+    mx = -100;
+    mx2 = 1200;
+    my = -400;
+    my2 = 1500;
+    x1 = random(0, 500);
+    x2 = random(0, 500);
+    y1 = random(0, 500);
+    y2 = random(0, 500);
+    epixel = false;  
+  }
+  fill(#000105);
+  textSize(30);
+  text("TRAFFIC                         Points: " + point, 50, 50);
+  fill(255);
+  rect(x, y, 60, 60);
+  if (keyPressed && (key == CODED)) {
+    if (keyCode == UP) {
+      u = true;
+    }
+    if (keyCode == DOWN) {
+      d = true;
+    }
+    if (keyCode == RIGHT) {
+      r = true;
+    }
+    if (keyCode == LEFT) {
+      l = true;
+    }
+  }
+  if (u) {
+    y -= speed;
+  } 
+  if (d) {
+    y += speed;
+  }
+  if (r) {
+    x += speed;
+  } 
+  if (l) {
+    x -= speed;
+  }
+    if (x > width +30) {
+    x = -30;
+  }
+  if (x < -30) {
+    x = 630;
+  }
+  if (y > width + 30) {
+    y = -30;
+  }
+  if (y < -30) {
+    y = 630;
+  }
+}
+
+void keyReleased() {
+  if (u) {
+    u = false;
+  }
+  if (d) {
+    d = false;
+  }
+  if (r) {
+    r = false;
+  }
+  if (l) {
+    l = false;
+  }
+}
+//END FINAL PROJECT CODE//
+
+</script>
+<canvas id="sketch" style="border: 1px solid black;"></canvas>
+</body>
+</html>
+
